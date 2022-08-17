@@ -48,6 +48,8 @@ public class TestDyP {
     }
 
     static int[][] matrix = {{5},{7,8},{2,3,4},{4,9,6,1},{2,7,9,4,5}};
+
+    static int[][] cache = new int[5][6];
     /*
     * matrix 矩阵
     * level 第几层
@@ -56,7 +58,6 @@ public class TestDyP {
     * */
     static void yanghuiTriangleRyc(int[][] matrix, int level, int index, int value) {
         System.out.println(String.format("%d===%d===%d",level, index, value));
-//        System.out.println(index);
         if (level >= 4) {
             if (value < maxW) {
                 maxW = value;
@@ -67,8 +68,11 @@ public class TestDyP {
         for (int i = 0; i <= 1; i++) {
             int idx = index + i;
             yanghuiTriangleRyc(matrix, next, idx, value + matrix[next][idx]);
-            yanghuiTriangleRyc(matrix, next, idx, value + matrix[next][idx]);
         }
+    }
+
+    static void yanghuiTriangle(int[][] matrix, int level, int index, int value) {
+        System.out.println(String.format("%d===%d===%d",level, index, value));
     }
 
     public static void main(String[] args) {
@@ -77,6 +81,11 @@ public class TestDyP {
 //        f(0, 0, a, 4, 10);
 //        int x = knapsack2(a, 5, 10);
 //        System.out.println(x);
+        for (int i = 0;i< 5; i++) {
+            for (int j = 0; j < 6; j ++) {
+                cache[i][j] = -1;
+            }
+        }
         yanghuiTriangleRyc(matrix, 0, 0, 5);
         System.out.println(maxW);
 

@@ -1,5 +1,5 @@
 import java.io.*;
-class TestHeap {
+class TestKMP {
   // b表示模式串，m表示模式串的长度
   private static int[] getNexts(char[] b, int m) {
     int[] next = new int[m];

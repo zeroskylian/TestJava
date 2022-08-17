@@ -1,5 +1,3 @@
-import java.lang.reflect.Array;
-
 class TestBuildHeap {
   static void buildHeap(int[] a, int n) {
     for (int i = n / 2; i >= 1; --i) {

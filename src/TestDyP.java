@@ -1,6 +1,6 @@
 public class TestDyP {
 
-    public static int maxW = 0; //存储背包中物品总重量的最大值
+    public static int maxW = Integer.MAX_VALUE; //存储背包中物品总重量的最大值
 
     // cw表示当前已经装进去的物品的重量和；i表示考察到哪个物品了；
     // w背包重量；items表示每个物品的重量；n表示物品个数
@@ -47,11 +47,39 @@ public class TestDyP {
         return 0;
     }
 
+    static int[][] matrix = {{5},{7,8},{2,3,4},{4,9,6,1},{2,7,9,4,5}};
+    /*
+    * matrix 矩阵
+    * level 第几层
+    * index 当前处于层级的第几个元素
+    * value 当前总值
+    * */
+    static void yanghuiTriangle(int[][] matrix, int level, int index, int value) {
+//        System.out.println(String.format("%d===%d===%d",level, index, value));
+        System.out.println(index);
+        if (level >= 4) {
+            if (value < maxW) {
+                maxW = value;
+            }
+            return;
+        }
+        for (int i = 0; i <= 1; i++) {
+            int next = level + 1;
+            if (next < matrix.length) {
+                yanghuiTriangle(matrix, next, index + i, value + matrix[next][i]);
+                yanghuiTriangle(matrix, next, i + index, value + matrix[next][i + 1]);
+            }
+        }
+    }
+
     public static void main(String[] args) {
 
-        int[] a =  {2, 2, 5, 9, 13};
+//        int[] a =  {2, 2, 5, 9, 13};
 //        f(0, 0, a, 4, 10);
-        int x = knapsack2(a, 5, 10);
-        System.out.println(x);
+//        int x = knapsack2(a, 5, 10);
+//        System.out.println(x);
+        yanghuiTriangle(matrix, 0, 0, 5);
+        System.out.println(maxW);
+
     }
 }

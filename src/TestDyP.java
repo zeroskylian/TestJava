@@ -54,21 +54,20 @@ public class TestDyP {
     * index 当前处于层级的第几个元素
     * value 当前总值
     * */
-    static void yanghuiTriangle(int[][] matrix, int level, int index, int value) {
-//        System.out.println(String.format("%d===%d===%d",level, index, value));
-        System.out.println(index);
+    static void yanghuiTriangleRyc(int[][] matrix, int level, int index, int value) {
+        System.out.println(String.format("%d===%d===%d",level, index, value));
+//        System.out.println(index);
         if (level >= 4) {
             if (value < maxW) {
                 maxW = value;
             }
             return;
         }
+        int next = level + 1;
         for (int i = 0; i <= 1; i++) {
-            int next = level + 1;
-            if (next < matrix.length) {
-                yanghuiTriangle(matrix, next, index + i, value + matrix[next][i]);
-                yanghuiTriangle(matrix, next, i + index, value + matrix[next][i + 1]);
-            }
+            int idx = index + i;
+            yanghuiTriangleRyc(matrix, next, idx, value + matrix[next][idx]);
+            yanghuiTriangleRyc(matrix, next, idx, value + matrix[next][idx]);
         }
     }
 
@@ -78,7 +77,7 @@ public class TestDyP {
 //        f(0, 0, a, 4, 10);
 //        int x = knapsack2(a, 5, 10);
 //        System.out.println(x);
-        yanghuiTriangle(matrix, 0, 0, 5);
+        yanghuiTriangleRyc(matrix, 0, 0, 5);
         System.out.println(maxW);
 
     }

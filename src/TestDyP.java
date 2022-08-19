@@ -50,7 +50,7 @@ public class TestDyP {
     static int[][] matrix = {{5},{7,8},{2,3,4},{4,9,6,1},{2,7,9,4,5}};
 
     static int[][] cache = new int[5][6];
-    /*
+    /* 回溯算法
     * matrix 矩阵
     * level 第几层
     * index 当前处于层级的第几个元素
@@ -69,25 +69,50 @@ public class TestDyP {
             int idx = index + i;
             yanghuiTriangleRyc(matrix, next, idx, value + matrix[next][idx]);
         }
+
+//        yanghuiTriangleRyc(matrix, next, index, value + matrix[next][index]);
+//        index++;
+//        yanghuiTriangleRyc(matrix, next, index, value + matrix[next][index]);
     }
 
-    static void yanghuiTriangle(int[][] matrix, int level, int index, int value) {
-        System.out.println(String.format("%d===%d===%d",level, index, value));
+    ///
+    static int yanghuiTriangleDy(int[][] matrix) {
+        int length = matrix.length;
+        int[][] dy = new int[length][length];
+        for (int i = length - 1; i >= 0; i--) {
+            int[] rawNums = matrix[i];
+            int rowLength = rawNums.length;
+            for (int j = 0; j < rowLength; j++) {
+                if (i == length - 1) {
+                    dy[i][j] = rawNums[j];
+                } else {
+                    int[] next = dy[i + 1];
+                    dy[i][j] = Math.min(next[j], next[j + 1]) + rawNums[j];
+                }
+            }
+        }
+        return dy[0][0];
+    }
+
+    /// 大牛写的
+    public static int yanghuiTriangleByBoss(int[][] matrix) {
+        int length = matrix.length;
+        // 用于存储每一层的状态
+        int[] min = new int[length + 1];
+        for (int i = length - 1; i >= 0; i--) {
+            int[] rawNums = matrix[i];
+            int rowLength = rawNums.length;
+            for (int j = 0; j < rowLength; j++) {
+                min[j] = Math.min(min[j], min[j + 1]) + rawNums[j];
+            }
+        }
+        return min[0];
     }
 
     public static void main(String[] args) {
-
-//        int[] a =  {2, 2, 5, 9, 13};
-//        f(0, 0, a, 4, 10);
-//        int x = knapsack2(a, 5, 10);
-//        System.out.println(x);
-        for (int i = 0;i< 5; i++) {
-            for (int j = 0; j < 6; j ++) {
-                cache[i][j] = -1;
-            }
-        }
-        yanghuiTriangleRyc(matrix, 0, 0, 5);
-        System.out.println(maxW);
-
+//        yanghuiTriangleRyc(matrix, 0, 0, 5);
+//        System.out.println(maxW);
+//        System.out.println(yanghuiTriangleByBoss(matrix));
+        System.out.println(yanghuiTriangleDy(matrix));
     }
 }

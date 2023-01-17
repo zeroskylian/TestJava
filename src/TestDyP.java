@@ -19,7 +19,7 @@ public class TestDyP {
         }
         System.out.println(String.format("leave %d",i));
     }
-    public static int knapsack2(int[] items, int n, int w) {
+    public static int knapsackDy(int[] items, int n, int w) {
         boolean[] states = new boolean[w+1]; // 默认值false
         states[0] = true;  // 第一行的数据要特殊处理，可以利用哨兵优化
         if (items[0] <= w) {
@@ -49,7 +49,6 @@ public class TestDyP {
 
     static int[][] matrix = {{5},{7,8},{2,3,4},{4,9,6,1},{2,7,9,4,5}};
 
-    static int[][] cache = new int[5][6];
     /* 回溯算法
     * matrix 矩阵
     * level 第几层
@@ -65,14 +64,9 @@ public class TestDyP {
             return;
         }
         int next = level + 1;
-        for (int i = 0; i <= 1; i++) {
-            int idx = index + i;
-            yanghuiTriangleRyc(matrix, next, idx, value + matrix[next][idx]);
-        }
-
-//        yanghuiTriangleRyc(matrix, next, index, value + matrix[next][index]);
-//        index++;
-//        yanghuiTriangleRyc(matrix, next, index, value + matrix[next][index]);
+        yanghuiTriangleRyc(matrix, next, index, value + matrix[next][index]);
+        index++;
+        yanghuiTriangleRyc(matrix, next, index, value + matrix[next][index]);
     }
 
     ///
@@ -109,10 +103,97 @@ public class TestDyP {
         return min[0];
     }
 
+    static int[] maxIncrease = {2, 9, 1, 6, 5, 1, 7};
+
+    static int maxIncreaseLength = 0;
+    public static void maxIncreaseLengthRC(int[] maxIncrease, int point, int index,  int length) {
+        if (index == maxIncrease.length - 1) {
+            if (length > maxIncreaseLength) {
+                maxIncreaseLength = length;
+            }
+            return;
+        }
+        // 锚点
+        int anchor = maxIncrease[index];
+        for (int i = index + 1; i < maxIncrease.length; i++) {
+            int value = maxIncrease[i];
+            if (value > anchor) {
+                int l = length + 1;
+                maxIncreaseLengthRC(maxIncrease, i, i, l);
+            } else {
+                // 回溯到上一个锚点
+                int old = i - 1;
+                maxIncreaseLengthRC(maxIncrease, old, i, length);
+            }
+        }
+    }
+
+    public static int minPathSum(int[][] grid) {
+        int row = grid.length;
+        int column = grid[0].length;
+        int[][] result = new int[row][column];
+        result[0][0] = grid[0][0];
+        for (int i = 1; i < row; i++) {
+            result[i][0] = grid[i][0] + result[i - 1][0];
+        }
+
+        for (int j = 1; j < column; j++) {
+            result[0][j] = grid[0][j] + result[0][j - 1];
+        }
+        for (int i = 1; i < row; i++) {
+            for (int j = 1; j < column; j++) {
+                result[i][j] = grid[i][j] + Math.min(result[i - 1][j], result[i][j - 1]);
+            }
+        }
+        return result[row - 1][column - 1];
+    }
+
+    static int money1(int fin) {
+        int[] dy = new int[fin + 1];
+        for (int i = 0; i <= fin; i++) {
+            dy[i] = 0;
+        }
+        if (fin == 1) {
+            return 1;
+        }
+        if (fin == 2) {
+            return 2;
+        }
+        if (fin == 3) {
+            return 1;
+        }
+        if (fin == 4) {
+            return 2;
+        }
+        if (fin == 5) {
+            return 1;
+        }
+        dy[1] = 1;
+        dy[2] = 2;
+        dy[3] = 1;
+        dy[4] = 2;
+        dy[5] = 1;
+        if (fin < 6) {
+            return dy[fin];
+        }
+        for (int i = 6; i <= fin; i++) {
+            dy[i] = 1 + Math.min(dy[i - 1], Math.min(dy[i - 3], dy[i - 5]));
+        }
+        return dy[fin];
+    }
+
     public static void main(String[] args) {
 //        yanghuiTriangleRyc(matrix, 0, 0, 5);
 //        System.out.println(maxW);
 //        System.out.println(yanghuiTriangleByBoss(matrix));
-        System.out.println(yanghuiTriangleDy(matrix));
+//        System.out.println(yanghuiTriangleDy(matrix));
+//        maxIncreaseLengthRC(maxIncrease, 0, 0,1);
+//        System.out.println(maxIncreaseLength);
+//        System.out.println(lengthOfLIS(maxIncrease));
+//        int[][] grid = {{1,3,1},{1,5,1}};
+//        System.out.println(minPathSum(grid));
+
+        System.out.println(money1(10));
     }
+
 }
